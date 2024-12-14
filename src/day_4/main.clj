@@ -30,3 +30,30 @@
 
 ; solution for part 1
 (println (reduce (fn [acc x] (+ acc (count-xmas x))) 0 data))
+
+(defn loc [x y] ((matrix x) y))
+
+(def n (- (count matrix) 1))
+
+(def coordinates (for [x (range 1 n) y (range 1 n)] [x y]))
+
+(defn is-mas? [[x y]]
+  (and
+    (= (loc x y) \A)
+    (or
+      (and (= (loc (dec x) (dec y)) \M)
+           (= (loc (inc x) (inc y)) \S))
+      (and (= (loc (dec x) (dec y)) \S)
+           (= (loc (inc x) (inc y)) \M))
+      )
+    (or
+      (and (= (loc (dec x) (inc y)) \M)
+           (= (loc (inc x) (dec y)) \S))
+      (and (= (loc (dec x) (inc y)) \S)
+           (= (loc (inc x) (dec y)) \M))
+      )
+    )
+  )
+
+; solution for part 2
+(reduce (fn [acc [x y]] (if (is-mas? [x y]) (inc acc) acc)) 0 coordinates)
